@@ -1,5 +1,7 @@
 ﻿using Artalex.DAL.Models;
 using Artalex.DAL.Seeders;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -7,7 +9,7 @@ using Artalex.BLL.Services.TenantService;
 
 namespace Artalex.DAL;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     private readonly IContextModificatorService _contextModificatorService;
     private readonly ITenantService _tenantService;
@@ -21,7 +23,7 @@ public class AppDbContext : DbContext
         _tenantService = tenantService;
     }
 
-    public DbSet<Error> Errors { get; set; }
+    // Domain-specific tables
     public DbSet<Audit> Audits { get; set; }
     public DbSet<AuditChapter> AuditChapters { get; set; }
     public DbSet<AuditManagerResponse> AuditManagerResponses { get; set; }
@@ -35,20 +37,17 @@ public class AppDbContext : DbContext
     public DbSet<AuditStatus> AuditStatus { get; set; }
     public DbSet<AuditType> AuditTypes { get; set; }
     public DbSet<Config> Configs { get; set; }
-    public DbSet<User> Users { get; set; }
-
+    public DbSet<Error> Errors { get; set; }
     public DbSet<UserFile> UserFiles { get; set; }
 
     public override int SaveChanges()
     {
-        // AddModificationDate();
         AddModificationDateAndTenant();
         return base.SaveChanges();
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // AddModificationDate();
         AddModificationDateAndTenant();
         return base.SaveChangesAsync(cancellationToken);
     }
@@ -56,16 +55,19 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Apply configurations
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-
+        // Configure decimal precision
         foreach (var property in modelBuilder.Model.GetEntityTypes()
                      .SelectMany(t => t.GetProperties())
                      .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
         {
             property.SetColumnType("decimal(18,2)");
         }
-        
+
+        // Global filters for soft delete & tenant
         if (_contextModificatorService?.IsGlobalQueryFiltersEnable == true)
         {
             var tenantId = _tenantService?.GetTenantId();
@@ -79,45 +81,34 @@ public class AppDbContext : DbContext
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
 
+        // Seed initial data
         modelBuilder.SeedData();
+
+        modelBuilder.Entity<User>().ToTable("Users");
+        modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
+        modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
+        modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
+        modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
+        modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
+        modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
     }
 
-    private void AddModificationDate()
-    {
-        var entries = ChangeTracker
-            .Entries()
-            .Where(e => e.Entity is BaseEntity && (
-                e.State == EntityState.Added
-                || e.State == EntityState.Modified));
-
-        foreach (var entityEntry in entries)
-        {
-            ((BaseEntity)entityEntry.Entity).ModifyDate = DateTime.UtcNow;
-
-            if (entityEntry.State == EntityState.Added)
-            {
-                ((BaseEntity)entityEntry.Entity).CreatedDate = DateTime.UtcNow;
-            }
-        }
-    }
-    
     private void AddModificationDateAndTenant()
     {
         var tenantId = _tenantService?.GetTenantId();
-        
-        if (tenantId == null) return;
 
         var entries = ChangeTracker
             .Entries()
-            .Where(e => e.Entity is BaseEntity && (
-                e.State == EntityState.Added
-                || e.State == EntityState.Modified));
+            .Where(e => e.Entity is BaseEntity &&
+                        (e.State == EntityState.Added || e.State == EntityState.Modified));
 
         foreach (var entityEntry in entries)
         {
             var entity = (BaseEntity)entityEntry.Entity;
             entity.ModifyDate = DateTime.UtcNow;
-            entity.TenantId = tenantId;
+
+            if (tenantId != null)
+                entity.TenantId = tenantId;
 
             if (entityEntry.State == EntityState.Added)
             {
@@ -127,6 +118,7 @@ public class AppDbContext : DbContext
     }
 }
 
+// Extension for global filters
 public static class ModelBuilderExtension
 {
     public static void ApplyGlobalFilters<TInterface>(this ModelBuilder modelBuilder,
@@ -134,14 +126,14 @@ public static class ModelBuilderExtension
     {
         var entities = modelBuilder.Model
             .GetEntityTypes()
-            // .Where(x => x.ClrType.BaseType == typeof(BaseEntity))
             .Where(x => typeof(BaseEntity).IsAssignableFrom(x.ClrType))
             .Select(e => e.ClrType);
+
         foreach (var entity in entities)
         {
             var newParam = Expression.Parameter(entity);
-            var newbody = ReplacingExpressionVisitor.Replace(expression.Parameters.Single(), newParam, expression.Body);
-            modelBuilder.Entity(entity).HasQueryFilter(Expression.Lambda(newbody, newParam));
+            var newBody = ReplacingExpressionVisitor.Replace(expression.Parameters.Single(), newParam, expression.Body);
+            modelBuilder.Entity(entity).HasQueryFilter(Expression.Lambda(newBody, newParam));
         }
     }
 }
