@@ -22,6 +22,22 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Error> Errors { get; set; }
+    public DbSet<Audit> Audits { get; set; }
+    public DbSet<AuditChapter> AuditChapters { get; set; }
+    public DbSet<AuditManagerResponse> AuditManagerResponses { get; set; }
+    public DbSet<AuditQuestion> AuditQuestions { get; set; }
+    public DbSet<AuditQuestionPotentialGround> AuditQuestionPotentialGrounds { get; set; }
+    public DbSet<AuditResponse> AuditResponses { get; set; }
+    public DbSet<AuditResponseAssignedTo> AuditResponseAssignedTos { get; set; }
+    public DbSet<AuditResponsePhoto> AuditResponsePhotos { get; set; }
+    public DbSet<AuditResponsePotentialGround> AuditResponsePotentialGrounds { get; set; }
+    public DbSet<AuditResponseStatus> AuditResponseStatus { get; set; }
+    public DbSet<AuditStatus> AuditStatus { get; set; }
+    public DbSet<AuditType> AuditTypes { get; set; }
+    public DbSet<Config> Configs { get; set; }
+    public DbSet<User> Users { get; set; }
+
+    public DbSet<UserFile> UserFiles { get; set; }
 
     public override int SaveChanges()
     {
