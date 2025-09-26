@@ -13,5 +13,18 @@ public abstract class BaseConfiguration<T> : IEntityTypeConfiguration<T> where T
         builder.HasIndex(x => x.IsDeleted);
 
         builder.HasIndex(x => x.CreatedDate);
+        
+        builder.Property(x => x.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(x => x.CreatedDate)
+            .IsRequired();
+
+        builder.Property(x => x.ModifyDate);
+
+        builder.Property(x => x.TenantId)
+            .HasMaxLength(50)
+            .IsRequired(false); 
     }
 }

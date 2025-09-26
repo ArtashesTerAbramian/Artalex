@@ -39,6 +39,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Config> Configs { get; set; }
     public DbSet<Error> Errors { get; set; }
     public DbSet<UserFile> UserFiles { get; set; }
+    public DbSet<Vessel> Vessels { get; set; }
+    public DbSet<VesselFile> VesselFiles { get; set; }
 
     public override int SaveChanges()
     {
