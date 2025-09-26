@@ -5,12 +5,7 @@ namespace Artalex.DAL.Models;
 
 public class AuditQuestionPotentialGround : BaseEntity
 {
-    [Required]
-    [MaxLength(250)]
-    [Column(TypeName = "text")]
     public string Text { get; set; }
-
-    public int AuditQuestionId { get; set; }
-    [ForeignKey(nameof(AuditQuestionId))]
+    public long AuditQuestionId { get; set; }
     public virtual AuditQuestion AuditQuestion { get; set; }
 }

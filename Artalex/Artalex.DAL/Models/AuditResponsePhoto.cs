@@ -5,16 +5,9 @@ namespace Artalex.DAL.Models
 {
     public class AuditResponsePhoto : BaseEntity
     {
-        [Required]
         public string FileName { get; set; } // Stored file name
-
-        [Required]
         public string FilePath { get; set; } // Path where the file is stored
-
-        // Foreign Key to AuditResponse
-        [Required]
-        public int AuditResponseId { get; set; }
-        [ForeignKey(nameof(AuditResponseId))]
+        public long AuditResponseId { get; set; }
         public virtual AuditResponse AuditResponse { get; set; }
     }
 }

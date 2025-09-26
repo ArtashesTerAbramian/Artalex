@@ -5,20 +5,20 @@ namespace Artalex.DAL.Models
 {
     public class Audit : BaseEntity
     {
-        public long AuditorUserId { get; set; } // Foreign key to User entity
+        public int AuditorUserId { get; set; } // Foreign key to User entity
 
         public virtual User Auditor { get; set; }
         public DateTime AuditDate { get; set; }
 
-        public int VesselId { get; set; } // Foreign key to Vessel entity
+        public long VesselId { get; set; } // Foreign key to Vessel entity
 
         public virtual Vessel Vessel { get; set; }
 
-        public int AuditStatusId { get; set; } // Foreign key to Status entity
+        public long AuditStatusId { get; set; } // Foreign key to Status entity
 
         public virtual AuditStatus AuditStatus { get; set; }
 
-        public int AuditTypeId { get; set; } // Foreign key to Status entity
+        public long AuditTypeId { get; set; } // Foreign key to Status entity
 
         public virtual AuditType AuditType { get; set; }
 

@@ -5,10 +5,6 @@ namespace Artalex.DAL.Models
 {
     public class AuditResponsePotentialGround : BaseEntity
     {
-        [Required]
-        [MaxLength(100)]
-
-        [Column(TypeName = "text")]
         public string Text { get; set; }
     }
 }
