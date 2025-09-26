@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artalex.Api", "Artalex\Artalex.Api\Artalex.Api.csproj", "{3A8DCFBF-0B23-4BFD-BF01-D2F6CA5153DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artalex.BLL", "Artalex\Artalex.BLL\Artalex.BLL.csproj", "{DBEC7FF3-195B-423A-BBE6-1936D2B1F28A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artalex.DAL", "Artalex\Artalex.DAL\Artalex.DAL.csproj", "{431E8A20-4393-4BCC-B50C-ABBAD57E5CA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artalex.DTO", "Artalex\Artalex.DTO\Artalex.DTO.csproj", "{A294EAB7-407E-45FF-BFCC-1D72C8767655}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3A8DCFBF-0B23-4BFD-BF01-D2F6CA5153DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A8DCFBF-0B23-4BFD-BF01-D2F6CA5153DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A8DCFBF-0B23-4BFD-BF01-D2F6CA5153DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A8DCFBF-0B23-4BFD-BF01-D2F6CA5153DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBEC7FF3-195B-423A-BBE6-1936D2B1F28A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBEC7FF3-195B-423A-BBE6-1936D2B1F28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBEC7FF3-195B-423A-BBE6-1936D2B1F28A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBEC7FF3-195B-423A-BBE6-1936D2B1F28A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431E8A20-4393-4BCC-B50C-ABBAD57E5CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431E8A20-4393-4BCC-B50C-ABBAD57E5CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431E8A20-4393-4BCC-B50C-ABBAD57E5CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431E8A20-4393-4BCC-B50C-ABBAD57E5CA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A294EAB7-407E-45FF-BFCC-1D72C8767655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A294EAB7-407E-45FF-BFCC-1D72C8767655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A294EAB7-407E-45FF-BFCC-1D72C8767655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A294EAB7-407E-45FF-BFCC-1D72C8767655}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
