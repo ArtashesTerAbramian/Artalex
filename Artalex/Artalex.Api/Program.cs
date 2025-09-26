@@ -27,6 +27,8 @@ try
     builder.Environment.WebRootPath = builder.Configuration.GetSection("FileSettings").GetSection("FilePath").Value;
 
     // Add services to the container.
+    builder.Services.AddHttpContextAccessor();
+    
     builder.Services.AddDbContext(builder.Configuration);
 
     builder.Services.AddWebServices(builder.Configuration);
