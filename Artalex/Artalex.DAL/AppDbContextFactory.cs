@@ -1,5 +1,4 @@
-﻿using Artalex.BLL.Services.TenantService;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Artalex.DAL;
 
@@ -11,13 +10,13 @@ public class AppDbContextFactory : DesignTimeDbContextFactory<AppDbContext>
     {
     }
 
-    public AppDbContextFactory(IContextModificatorService contextModificatorService)
+    public AppDbContextFactory(IContextModificatorService contextModificatorService, IServiceProvider serviceProvider)
     {
         _contextModificatorService = contextModificatorService;
     }
 
-    protected override AppDbContext CreateNewInstance(DbContextOptions<AppDbContext> options, ITenantService tenantService)
+    protected override AppDbContext CreateNewInstance(DbContextOptions<AppDbContext> options)
     {
-        return new AppDbContext(options, _contextModificatorService, tenantService);
+        return new AppDbContext(options, _contextModificatorService);
     }
 }

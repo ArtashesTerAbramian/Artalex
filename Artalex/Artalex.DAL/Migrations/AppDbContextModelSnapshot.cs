@@ -102,10 +102,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("port_agent_phone");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<long>("VesselId")
                         .HasColumnType("bigint")
@@ -168,10 +168,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_chapters");
@@ -232,10 +232,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("response_text");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_manager_responses");
@@ -301,10 +301,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("reference_to");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -353,10 +353,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modify_date");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -435,10 +435,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("response_text");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_responses");
@@ -493,10 +493,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modify_date");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -553,10 +553,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modify_date");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_response_photos");
@@ -596,10 +596,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modify_date");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -660,10 +660,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("status_name");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_response_status");
@@ -706,10 +706,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("status_name");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_status");
@@ -752,10 +752,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_types");
@@ -803,10 +803,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("name");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -823,6 +823,111 @@ namespace Artalex.DAL.Migrations
                         .HasDatabaseName("ix_configs_is_deleted");
 
                     b.ToTable("Configs", (string)null);
+                });
+
+            modelBuilder.Entity("Artalex.DAL.Models.MailQueue", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("contact");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date");
+
+                    b.Property<int>("FailedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("failed_count");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<bool>("IsSent")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_sent");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modify_date");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("subject");
+
+                    b.Property<string>("TenantName")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("tenant_name");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_mail_queues");
+
+                    b.HasIndex("CreatedDate")
+                        .HasDatabaseName("ix_mail_queues_created_date");
+
+                    b.HasIndex("IsDeleted")
+                        .HasDatabaseName("ix_mail_queues_is_deleted");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_mail_queues_user_id");
+
+                    b.ToTable("MailQueues", (string)null);
+                });
+
+            modelBuilder.Entity("Artalex.DAL.Models.Tenant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("text")
+                        .HasColumnName("connection_string");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("TenancyName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tenancy_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tenants");
+
+                    b.ToTable("Tenants", (string)null);
                 });
 
             modelBuilder.Entity("Artalex.DAL.Models.User", b =>
@@ -913,8 +1018,9 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("surname");
 
-                    b.Property<string>("TenantId")
-                        .HasColumnType("text")
+                    b.Property<int?>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("integer")
                         .HasColumnName("tenant_id");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -935,6 +1041,9 @@ namespace Artalex.DAL.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("ix_users_tenant_id");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -972,10 +1081,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modify_date");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
@@ -1050,10 +1159,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("next_audit_date");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.HasKey("Id")
                         .HasName("pk_vessels");
@@ -1102,10 +1211,10 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modify_date");
 
-                    b.Property<string>("TenantId")
+                    b.Property<string>("TenantName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tenant_id");
+                        .HasColumnName("tenant_name");
 
                     b.Property<long>("VesselId")
                         .HasColumnType("bigint")
@@ -1150,14 +1259,13 @@ namespace Artalex.DAL.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("normalized_name");
 
-                    b.HasKey("Id")
-                        .HasName("pk_roles");
+                    b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -1288,6 +1396,17 @@ namespace Artalex.DAL.Migrations
                         .HasName("pk_user_tokens");
 
                     b.ToTable("UserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Artalex.DAL.Models.Role", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole<int>");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Artalex.DAL.Models.Audit", b =>
@@ -1463,6 +1582,30 @@ namespace Artalex.DAL.Migrations
                     b.Navigation("AuditResponse");
                 });
 
+            modelBuilder.Entity("Artalex.DAL.Models.MailQueue", b =>
+                {
+                    b.HasOne("Artalex.DAL.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_mail_queues_asp_net_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Artalex.DAL.Models.User", b =>
+                {
+                    b.HasOne("Artalex.DAL.Models.Tenant", "Tenant")
+                        .WithMany("Users")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_users_tenants_tenant_id");
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("Artalex.DAL.Models.UserFile", b =>
                 {
                     b.HasOne("Artalex.DAL.Models.User", "User")
@@ -1494,7 +1637,7 @@ namespace Artalex.DAL.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_role_claims_roles_role_id");
+                        .HasConstraintName("fk_role_claims_asp_net_roles_role_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -1524,7 +1667,7 @@ namespace Artalex.DAL.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_user_roles_roles_role_id");
+                        .HasConstraintName("fk_user_roles_asp_net_roles_role_id");
 
                     b.HasOne("Artalex.DAL.Models.User", null)
                         .WithMany()
@@ -1542,6 +1685,16 @@ namespace Artalex.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_user_tokens_users_user_id");
+                });
+
+            modelBuilder.Entity("Artalex.DAL.Models.Role", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                        .WithOne()
+                        .HasForeignKey("Artalex.DAL.Models.Role", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_roles_asp_net_roles_id");
                 });
 
             modelBuilder.Entity("Artalex.DAL.Models.Audit", b =>
@@ -1571,6 +1724,11 @@ namespace Artalex.DAL.Migrations
             modelBuilder.Entity("Artalex.DAL.Models.AuditType", b =>
                 {
                     b.Navigation("Chapters");
+                });
+
+            modelBuilder.Entity("Artalex.DAL.Models.Tenant", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Artalex.DAL.Models.User", b =>

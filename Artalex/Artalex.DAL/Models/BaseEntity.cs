@@ -9,7 +9,7 @@ public class BaseEntity
     public DateTime CreatedDate { get; set; }
     public DateTime? ModifyDate { get; set; }
     public bool IsDeleted { get; set; }
-    public string TenantId{ get; set; }
+    public string TenantName { get; set; }
 }
 
 [NotMapped]

@@ -1,3 +1,4 @@
+using System.Text;
 using FluentValidation.AspNetCore;
 using Artalex.BLL;
 using Artalex.BLL.Helpers;
@@ -10,6 +11,10 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using Artalex.BLL.Helpers;
 using Artalex.BLL.Middlewares;
+using Artalex.DAL.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Serilog.Events;
 
 try
@@ -24,12 +29,45 @@ try
 
     builder.Host.UseSerilog(Log.Logger);
 
+    // builder.Services.AddImageSharp()
+    // .RemoveProvider<PhysicalFileSystemProvider>()
+    // .AddProvider<CustomPhysicalFileSystemProvider>();
+
+    builder.Services.AddDbContext(builder.Configuration);
+
+    builder.Services.AddIdentity<User, Role>()
+        .AddEntityFrameworkStores<AppDbContext>()
+        .AddDefaultTokenProviders();
+
     builder.Environment.WebRootPath = builder.Configuration.GetSection("FileSettings").GetSection("FilePath").Value;
 
-    // Add services to the container.
+
+// JWT config
+    var jwtKey = builder.Configuration["Jwt:Key"]; // put in appsettings.json
+    var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+
+    builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtIssuer,
+                ValidAudience = jwtIssuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            };
+        });
+
+    builder.Services.AddAuthorization();
+
     builder.Services.AddHttpContextAccessor();
-    
-    builder.Services.AddDbContext(builder.Configuration);
 
     builder.Services.AddWebServices(builder.Configuration);
 
@@ -69,6 +107,8 @@ try
     });
 
 
+    // app.UseImageSharp();
+
     app.UseStaticFiles(new StaticFileOptions()
     {
         OnPrepareResponse = ctx =>
@@ -85,8 +125,15 @@ try
 
     app.UseMiddleware<ErrorHandlingMiddleware>();
 
+    app.UseAuthentication();
     app.UseAuthorization();
-
+    app.Use(async (context, next) =>
+    {
+        var db = context.RequestServices.GetRequiredService<AppDbContext>();
+        var tenantService = context.RequestServices.GetRequiredService<ITenantService>();
+        db.TenantName = tenantService.TenantName;
+        await next();
+    });
     app.MapControllers();
 
     app.Run();

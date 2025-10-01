@@ -23,7 +23,7 @@ public abstract class BaseConfiguration<T> : IEntityTypeConfiguration<T> where T
 
         builder.Property(x => x.ModifyDate);
 
-        builder.Property(x => x.TenantId)
+        builder.Property(x => x.TenantName)
             .HasMaxLength(50)
             .IsRequired(false); 
     }

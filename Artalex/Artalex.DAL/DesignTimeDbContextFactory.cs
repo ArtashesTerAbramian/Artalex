@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
-using Artalex.BLL.Services.TenantService;
 
 namespace Artalex.DAL
 {
@@ -16,7 +13,7 @@ namespace Artalex.DAL
                 Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
         }
 
-        protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options, ITenantService? tenantService = null);
+        protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options);
 
         private TContext Create(string basePath, string env)
         {
@@ -46,7 +43,7 @@ namespace Artalex.DAL
                 .UseSnakeCaseNamingConvention();
 
             var options = optionsBuilder.Options;
-            return CreateNewInstance(options, null);
+            return CreateNewInstance(options);
         }
     }
 }

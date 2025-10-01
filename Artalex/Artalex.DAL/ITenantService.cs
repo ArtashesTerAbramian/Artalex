@@ -1,6 +1,5 @@
-﻿namespace Artalex.BLL.Services.TenantService;
+﻿namespace Artalex.DAL;
 
 public interface ITenantService
 {
-    string GetTenantId();
-}
+    string TenantName { get; }}

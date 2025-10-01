@@ -5,25 +5,24 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
-using Artalex.BLL.Services.TenantService;
 
 namespace Artalex.DAL;
 
 public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     private readonly IContextModificatorService _contextModificatorService;
-    private readonly ITenantService _tenantService;
+    public string TenantName { get; set; }
 
     public AppDbContext(
         DbContextOptions options, 
-        IContextModificatorService contextModificatorService,
-        ITenantService tenantService) : base(options)
+        IContextModificatorService contextModificatorService
+        ) : base(options)
     {
         _contextModificatorService = contextModificatorService;
-        _tenantService = tenantService;
     }
 
     // Domain-specific tables
+    public DbSet<Tenant> Tenants { get; set; }
     public DbSet<Audit> Audits { get; set; }
     public DbSet<AuditChapter> AuditChapters { get; set; }
     public DbSet<AuditManagerResponse> AuditManagerResponses { get; set; }
@@ -41,6 +40,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<UserFile> UserFiles { get; set; }
     public DbSet<Vessel> Vessels { get; set; }
     public DbSet<VesselFile> VesselFiles { get; set; }
+    public DbSet<MailQueue> MailQueues { get; set; }
 
     public override int SaveChanges()
     {
@@ -72,9 +72,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
         // Global filters for soft delete & tenant
         if (_contextModificatorService?.IsGlobalQueryFiltersEnable == true)
         {
-            var tenantId = _tenantService?.GetTenantId();
             modelBuilder.ApplyGlobalFilters<BaseEntity>(e =>
-                !e.IsDeleted && (tenantId == null || e.TenantId == tenantId)
+                !e.IsDeleted && (TenantName != null || e.TenantName == TenantName)
             );
         }
 
@@ -86,8 +85,17 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
         // Seed initial data
         modelBuilder.SeedData();
 
+        modelBuilder.Entity<Tenant>(entity =>
+        {
+            entity.ToTable("Tenants");
+            entity.HasKey(t => t.Id);
+            entity.HasMany(t => t.Users)
+                .WithOne(u => u.Tenant)
+                .HasForeignKey(u => u.TenantId);
+        });
+        
         modelBuilder.Entity<User>().ToTable("Users");
-        modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
+        modelBuilder.Entity<Role>().ToTable("Roles");
         modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
         modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
         modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
@@ -97,8 +105,6 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 
     private void AddModificationDateAndTenant()
     {
-        var tenantId = _tenantService?.GetTenantId();
-
         var entries = ChangeTracker
             .Entries()
             .Where(e => e.Entity is BaseEntity &&
@@ -109,8 +115,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
             var entity = (BaseEntity)entityEntry.Entity;
             entity.ModifyDate = DateTime.UtcNow;
 
-            if (tenantId != null)
-                entity.TenantId = tenantId;
+            if (TenantName != null)
+                entity.TenantName = TenantName;
 
             if (entityEntry.State == EntityState.Added)
             {

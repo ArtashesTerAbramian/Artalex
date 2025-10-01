@@ -11,6 +11,21 @@ namespace Artalex.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    normalized_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    concurrency_stamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AuditResponseAssignedTos",
                 columns: table => new
                 {
@@ -20,7 +35,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,7 +52,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,7 +71,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,7 +88,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -90,7 +105,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -109,7 +124,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -117,18 +132,104 @@ namespace Artalex.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "Tenants",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    normalized_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    concurrency_stamp = table.Column<string>(type: "text", nullable: true)
+                    tenancy_name = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    connection_string = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_roles", x => x.id);
+                    table.PrimaryKey("pk_tenants", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vessels",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    imo = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: false),
+                    last_audit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    next_audit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    last_auditor_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_vessels", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleClaims",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    role_id = table.Column<int>(type: "integer", nullable: false),
+                    claim_type = table.Column<string>(type: "text", nullable: true),
+                    claim_value = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_role_claims", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_role_claims_asp_net_roles_role_id",
+                        column: x => x.role_id,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_roles_asp_net_roles_id",
+                        column: x => x.id,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuditChapters",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    audit_type_id = table.Column<long>(type: "bigint", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_audit_chapters", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_audit_chapters_audit_types_audit_type_id",
+                        column: x => x.audit_type_id,
+                        principalTable: "AuditTypes",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,7 +243,7 @@ namespace Artalex.DAL.Migrations
                     messenger = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     messenger_phone_number = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     additional_info = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    tenant_id = table.Column<string>(type: "text", nullable: true),
+                    tenant_id = table.Column<int>(type: "integer", nullable: false),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -161,71 +262,142 @@ namespace Artalex.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_users", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Vessels",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    imo = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: false),
-                    last_audit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    next_audit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    last_auditor_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_vessels", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AuditChapters",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    audit_type_id = table.Column<long>(type: "bigint", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_audit_chapters", x => x.id);
                     table.ForeignKey(
-                        name: "fk_audit_chapters_audit_types_audit_type_id",
-                        column: x => x.audit_type_id,
-                        principalTable: "AuditTypes",
+                        name: "fk_users_tenants_tenant_id",
+                        column: x => x.tenant_id,
+                        principalTable: "Tenants",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleClaims",
+                name: "VesselFiles",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    role_id = table.Column<int>(type: "integer", nullable: false),
-                    claim_type = table.Column<string>(type: "text", nullable: true),
-                    claim_value = table.Column<string>(type: "text", nullable: true)
+                    file_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    file_path = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
+                    vessel_id = table.Column<long>(type: "bigint", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_role_claims", x => x.id);
+                    table.PrimaryKey("pk_vessel_files", x => x.id);
                     table.ForeignKey(
-                        name: "fk_role_claims_roles_role_id",
-                        column: x => x.role_id,
-                        principalTable: "Roles",
+                        name: "fk_vessel_files_vessels_vessel_id",
+                        column: x => x.vessel_id,
+                        principalTable: "Vessels",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuditQuestions",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    audit_chapter_id = table.Column<long>(type: "bigint", nullable: false),
+                    text = table.Column<string>(type: "text", nullable: false),
+                    explanation = table.Column<string>(type: "text", nullable: false),
+                    reference_to = table.Column<string>(type: "text", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_audit_questions", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_audit_questions_audit_chapters_audit_chapter_id",
+                        column: x => x.audit_chapter_id,
+                        principalTable: "AuditChapters",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Audits",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    auditor_user_id = table.Column<int>(type: "integer", nullable: false),
+                    audit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    vessel_id = table.Column<long>(type: "bigint", nullable: false),
+                    audit_status_id = table.Column<long>(type: "bigint", nullable: false),
+                    audit_type_id = table.Column<long>(type: "bigint", nullable: false),
+                    master_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    port_agent_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    port_agent_phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    port_agent_email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    embarkation_port = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    disembarkation_port = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    comment = table.Column<string>(type: "text", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_audits", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_audits_asp_net_users_auditor_id",
+                        column: x => x.auditor_user_id,
+                        principalTable: "Users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_audits_audit_status_audit_status_id",
+                        column: x => x.audit_status_id,
+                        principalTable: "AuditStatus",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_audits_audit_types_audit_type_id",
+                        column: x => x.audit_type_id,
+                        principalTable: "AuditTypes",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_audits_vessels_vessel_id",
+                        column: x => x.vessel_id,
+                        principalTable: "Vessels",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MailQueues",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    is_sent = table.Column<bool>(type: "boolean", nullable: false),
+                    failed_count = table.Column<int>(type: "integer", nullable: false),
+                    subject = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    text = table.Column<string>(type: "text", nullable: false),
+                    contact = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_mail_queues", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_mail_queues_asp_net_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -263,7 +435,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -307,9 +479,9 @@ namespace Artalex.DAL.Migrations
                 {
                     table.PrimaryKey("pk_user_roles", x => new { x.user_id, x.role_id });
                     table.ForeignKey(
-                        name: "fk_user_roles_roles_role_id",
+                        name: "fk_user_roles_asp_net_roles_role_id",
                         column: x => x.role_id,
-                        principalTable: "Roles",
+                        principalTable: "AspNetRoles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -341,105 +513,25 @@ namespace Artalex.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Audits",
+                name: "AuditQuestionPotentialGrounds",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    auditor_user_id = table.Column<int>(type: "integer", nullable: false),
-                    audit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    vessel_id = table.Column<long>(type: "bigint", nullable: false),
-                    audit_status_id = table.Column<long>(type: "bigint", nullable: false),
-                    audit_type_id = table.Column<long>(type: "bigint", nullable: false),
-                    master_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    port_agent_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    port_agent_phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    port_agent_email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    embarkation_port = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    disembarkation_port = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    comment = table.Column<string>(type: "text", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_audits", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_audits_asp_net_users_auditor_id",
-                        column: x => x.auditor_user_id,
-                        principalTable: "Users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_audits_audit_status_audit_status_id",
-                        column: x => x.audit_status_id,
-                        principalTable: "AuditStatus",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_audits_audit_types_audit_type_id",
-                        column: x => x.audit_type_id,
-                        principalTable: "AuditTypes",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_audits_vessels_vessel_id",
-                        column: x => x.vessel_id,
-                        principalTable: "Vessels",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VesselFiles",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    file_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    file_path = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
-                    vessel_id = table.Column<long>(type: "bigint", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_vessel_files", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_vessel_files_vessels_vessel_id",
-                        column: x => x.vessel_id,
-                        principalTable: "Vessels",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AuditQuestions",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    audit_chapter_id = table.Column<long>(type: "bigint", nullable: false),
                     text = table.Column<string>(type: "text", nullable: false),
-                    explanation = table.Column<string>(type: "text", nullable: false),
-                    reference_to = table.Column<string>(type: "text", nullable: false),
+                    audit_question_id = table.Column<long>(type: "bigint", nullable: false),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_audit_questions", x => x.id);
+                    table.PrimaryKey("pk_audit_question_potential_grounds", x => x.id);
                     table.ForeignKey(
-                        name: "fk_audit_questions_audit_chapters_audit_chapter_id",
-                        column: x => x.audit_chapter_id,
-                        principalTable: "AuditChapters",
+                        name: "fk_audit_question_potential_grounds_audit_questions_audit_question",
+                        column: x => x.audit_question_id,
+                        principalTable: "AuditQuestions",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -458,7 +550,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -484,30 +576,6 @@ namespace Artalex.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AuditQuestionPotentialGrounds",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    text = table.Column<string>(type: "text", nullable: false),
-                    audit_question_id = table.Column<long>(type: "bigint", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_audit_question_potential_grounds", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_audit_question_potential_grounds_audit_questions_audit_question",
-                        column: x => x.audit_question_id,
-                        principalTable: "AuditQuestions",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AuditResponses",
                 columns: table => new
                 {
@@ -524,7 +592,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -579,7 +647,7 @@ namespace Artalex.DAL.Migrations
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modify_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    tenant_id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    tenant_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -591,6 +659,12 @@ namespace Artalex.DAL.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "normalized_name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_audit_chapters_audit_type_id",
@@ -808,15 +882,24 @@ namespace Artalex.DAL.Migrations
                 column: "is_deleted");
 
             migrationBuilder.CreateIndex(
+                name: "ix_mail_queues_created_date",
+                table: "MailQueues",
+                column: "created_date");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_mail_queues_is_deleted",
+                table: "MailQueues",
+                column: "is_deleted");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_mail_queues_user_id",
+                table: "MailQueues",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_role_claims_role_id",
                 table: "RoleClaims",
                 column: "role_id");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "Roles",
-                column: "normalized_name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_user_claims_user_id",
@@ -852,6 +935,11 @@ namespace Artalex.DAL.Migrations
                 name: "EmailIndex",
                 table: "Users",
                 column: "normalized_email");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_tenant_id",
+                table: "Users",
+                column: "tenant_id");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -897,7 +985,13 @@ namespace Artalex.DAL.Migrations
                 name: "Configs");
 
             migrationBuilder.DropTable(
+                name: "MailQueues");
+
+            migrationBuilder.DropTable(
                 name: "RoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");
@@ -921,7 +1015,7 @@ namespace Artalex.DAL.Migrations
                 name: "AuditResponses");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AuditQuestionPotentialGrounds");
@@ -952,6 +1046,9 @@ namespace Artalex.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AuditChapters");
+
+            migrationBuilder.DropTable(
+                name: "Tenants");
 
             migrationBuilder.DropTable(
                 name: "AuditTypes");
